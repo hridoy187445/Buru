@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1f5a40">
+<title>BURU · Cozy Nest Nesting</title>
+<style>
+:root{--deep:#154734;--green:#1f7a53;--leaf:#2e9e6c;--mint:#e7f4ec;--mint2:#cfe8da;--white:#fff;--ink:#14261d;--mute:#5c7266;--line:#dbe7df;--warn:#b7791f;--nav:64px}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:#f6faf7}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--leaf);outline-offset:2px}
+.app{display:flex;min-height:100%}
+aside{width:250px;background:var(--deep);color:#fff;padding:20px 12px;position:sticky;top:0;height:100vh;overflow:auto;flex-shrink:0}
+.brand{display:flex;gap:10px;align-items:center;padding:0 10px 18px}
+.logo{width:40px;height:40px;border-radius:12px;background:#fff;color:var(--deep);display:grid;place-items:center;font-weight:800;font-size:20px}
+.brand b{display:block;font-size:20px;letter-spacing:.5px}.brand small{opacity:.75;font-size:12px}
+aside a{display:block;padding:10px 12px;border-radius:10px;color:#dcefe4;text-decoration:none;font-size:15px}
+aside a:hover{background:rgba(255,255,255,.1)}
+aside a.on{background:#fff;color:var(--deep);font-weight:700}
+main{flex:1;min-width:0;padding:20px 20px calc(var(--nav) + 24px);max-width:1100px}
+header.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+h1{font-size:26px;line-height:1.2;color:var(--deep)}
+.sub{color:var(--mute);font-size:14px}
+.pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:12.5px;font-weight:600;background:var(--mint);color:var(--deep)}
+.pill.warn{background:#fdf3de;color:var(--warn)}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}
+.card h3{font-size:16px;margin-bottom:6px;color:var(--deep)}
+.card p,.card li{font-size:14.5px;color:var(--mute)}
+.card ul{padding-left:18px}
+.hero{background:var(--deep);color:#fff;border-radius:18px;padding:22px;margin-bottom:16px}
+.hero h2{font-size:24px;line-height:1.25;margin-bottom:6px}
+.hero p{opacity:.85;max-width:60ch}
+.stat{font-size:28px;font-weight:800;color:var(--green)}
+.btn{background:var(--green);color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:600}
+.btn:hover{background:var(--deep)}
+.btn.ghost{background:#fff;color:var(--deep);border:1px solid var(--line)}
+.btn.light{background:#fff;color:var(--deep)}
+.btn.no{background:#fff;color:#a33;border:1px solid #e3c4c4}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+label{display:block;font-size:13.5px;font-weight:600;margin:10px 0 4px;color:var(--deep)}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}
+.sect{display:none}.sect.on{display:block}
+.note{background:var(--mint);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--deep);margin:12px 0}
+/* chat */
+.chat{display:flex;flex-direction:column;height:calc(100vh - 210px);min-height:360px}
+.msgs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:4px}
+.m{max-width:85%;padding:10px 13px;border-radius:14px;font-size:15px;white-space:pre-wrap}
+.m.b{background:#fff;border:1px solid var(--line);align-self:flex-start}
+.m.u{background:var(--green);color:#fff;align-self:flex-end}
+.chips{display:flex;gap:6px;overflow:auto;padding:8px 0}
+.chips button{white-space:nowrap;border:1px solid var(--mint2);background:var(--mint);color:var(--deep);border-radius:99px;padding:6px 12px;font-size:13.5px}
+.send{display:flex;gap:8px}.send input{flex:1}
+/* approval */
+.ap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.ap.done{opacity:.55}
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center;font-size:13px}
+.cal div{background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 2px;min-height:54px}
+.cal .h{background:var(--mint);font-weight:700;min-height:0}
+.cal .d{background:var(--green);color:#fff;border-color:var(--green)}
+/* nav */
+nav.bottom{display:none}
+.sheet{display:none;position:fixed;inset:0;background:rgba(10,30,20,.5);z-index:30}
+.sheet.open{display:block}
+.sheet div{position:absolute;left:0;right:0;bottom:0;background:#fff;border-radius:18px 18px 0 0;padding:14px;max-height:75vh;overflow:auto}
+.sheet a{display:block;padding:13px 10px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+@media(max-width:820px){
+ aside{display:none}
+ main{padding:14px 14px calc(var(--nav) + 20px)}
+ h1{font-size:22px}
+ nav.bottom{display:flex;position:fixed;left:0;right:0;bottom:0;height:var(--nav);background:#fff;border-top:1px solid var(--line);z-index:20;padding-bottom:env(safe-area-inset-bottom,0)}
+ nav.bottom a,nav.bottom button{flex:1;border:0;background:none;text-decoration:none;color:var(--mute);font-size:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+ nav.bottom .on{color:var(--green);font-weight:700}
+ .ico{font-size:20px;line-height:1}
+ .chat{height:calc(100vh - 250px)}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside id="side"></aside>
+<main>
+ <header class="top">
+  <div><h1 id="title">Home</h1><div class="sub">Cozy Nest Nesting · USA Home Decor</div></div>
+  <span class="pill">Nothing publishes without your approval</span>
+ </header>
+ <div id="views"></div>
+</main>
+</div>
+<nav class="bottom" id="bnav"></nav>
+<div class="sheet" id="sheet"><div id="sheetList"></div></div>
+
+<script>
+const S=[
+["home","Home","🏠"],["chat","AI Chat","💬"],["writer","Article Writer","✍️"],["keywords","Keyword Research","🔎"],
+["seo","SEO Manager","📈"],["blogger","Blogger","📝"],["pinterest","Pinterest","📌"],["facebook","Facebook","👍"],
+["analytics","Traffic Analytics","📊"],["calendar","Content Calendar","🗓️"],["approval","Approval Center","✅"],["settings","Settings","⚙️"]
+];
+const soon=(t,s)=>`<span class="pill warn">${t}</span> <span class="sub">${s}</span>`;
+const V={};
+V.home=()=>`
+<div class="hero"><h2>Good day. BURU is ready to build your blog.</h2><p>Your daily draft arrives at 9:00 AM Bangladesh time. You review it, then choose to publish.</p>
+<div class="row"><button class="btn light" onclick="go('chat')">Talk to BURU</button><button class="btn light" onclick="go('approval')">Open approvals</button></div></div>
+<div class="grid">
+<div class="card"><h3>Drafts waiting</h3><div class="stat" id="pendN">0</div><p>Items in Approval Center</p></div>
+<div class="card"><h3>Published today</h3><div class="stat">0</div><p>Blogger not connected yet</p></div>
+<div class="card"><h3>Visitors today</h3><div class="stat">–</div><p>Analytics not connected yet</p></div>
+<div class="card"><h3>Setup progress</h3><div class="stat">1 / 9</div><p>Step 1: Dashboard</p></div></div>
+<h3 style="margin:18px 0 8px;color:var(--deep)">Connections</h3>
+<div class="grid">
+<div class="card"><h3>AI Brain</h3>${soon("Not connected","Step 2")}</div>
+<div class="card"><h3>Blogger</h3>${soon("Not connected","Step 3")}</div>
+<div class="card"><h3>Search Console</h3>${soon("Not connected","Step 8")}</div>
+<div class="card"><h3>Facebook · Pinterest</h3>${soon("Accounts not created","Step 6")}</div></div>`;
+V.chat=()=>`
+<div class="chat"><div class="msgs" id="msgs"><div class="m b">Hi, I am BURU. Ask me to write an article, find keywords or prepare posts. My AI brain connects in Step 2, so for now I only show what I will do.</div></div>
+<div class="chips" id="chips"></div>
+<div class="send"><input id="ci" placeholder="Type a command to BURU" aria-label="Message"><button class="btn ghost" id="mic" aria-label="Voice input">🎤</button><button class="btn" id="sendB">Send</button></div></div>`;
+V.writer=()=>`<div class="card"><label for="wt">Topic or keyword</label><input id="wt" placeholder="e.g. small bedroom decorating ideas">
+<label for="wc">Category</label><select id="wc"><option>Modern Living Room Ideas</option><option>Small Bedroom Decorating Ideas</option><option>Luxury Home Decor</option><option>Farmhouse Kitchen Ideas</option><option>Budget-Friendly Home Makeover</option><option>Minimalist Interior Design</option><option>Seasonal Home Decoration</option><option>Christmas Home Decor</option></select>
+<label for="wl">Length</label><select id="wl"><option>1,000 words</option><option selected>1,200 words</option><option>1,500 words</option></select>
+<div class="row"><button class="btn" onclick="queue('Article request')">Write draft</button></div></div>
+<div class="note">Each draft includes title, meta description, H1/H2/H3 structure, FAQ, internal link ideas, image ideas with ALT text. Writing starts working in Step 2.</div>`;
+V.keywords=()=>`<div class="card"><label for="kq">Seed keyword</label><input id="kq" placeholder="e.g. farmhouse kitchen"><div class="row"><button class="btn" onclick="toast('Keyword research works after Step 5.')">Find keywords</button></div></div>
+<div class="card" style="margin-top:14px"><h3>Results</h3><p>No research yet. Keywords will show search intent and difficulty here.</p></div>`;
+V.seo=()=>`<div class="grid"><div class="card"><h3>Title and description check</h3><p>Reviews every draft for length and keyword use.</p></div><div class="card"><h3>Internal links</h3><p>Suggests links between your posts.</p></div><div class="card"><h3>Search Console</h3>${soon("Not connected","Step 8")}</div></div>`;
+V.blogger=()=>`<div class="card"><h3>Blog</h3><p>Cozy Nest Nesting · cozynestnesting.blogspot.com</p><div class="row">${soon("Not connected","Step 3")}</div></div>
+<div class="card" style="margin-top:14px"><h3>Posts</h3><p>Drafts and published posts will list here. BURU only creates drafts. You publish.</p></div>`;
+V.pinterest=()=>`<div class="card"><h3>Pinterest Business account</h3><p>You do not have one yet. Step 6 walks you through creating it on Android.</p></div>
+<div class="card" style="margin-top:14px"><h3>Pin drafts</h3><p>Titles, descriptions and image concepts will appear here for approval.</p></div>`;
+V.facebook=()=>`<div class="card"><h3>Facebook Page</h3><p>You do not have one yet. Step 6 walks you through creating it.</p></div>
+<div class="card" style="margin-top:14px"><h3>Post drafts</h3><p>Captions and a posting schedule will appear here for approval.</p></div>`;
+V.analytics=()=>`<div class="grid"><div class="card"><h3>Visitors</h3><div class="stat">–</div></div><div class="card"><h3>Organic search</h3><div class="stat">–</div></div><div class="card"><h3>Social referrals</h3><div class="stat">–</div></div></div>
+<div class="note">Connect Google Analytics and Search Console in Step 8 to see real numbers.</div>`;
+V.calendar=()=>{const d=new Date(),y=d.getFullYear(),m=d.getMonth(),f=new Date(y,m,1).getDay(),n=new Date(y,m+1,0).getDate();
+let h=["S","M","T","W","T","F","S"].map(x=>`<div class="h">${x}</div>`).join("")+"<div></div>".repeat(f);
+for(let i=1;i<=n;i++)h+=`<div class="${i===d.getDate()?"d":""}">${i}</div>`;
+return `<div class="card"><h3>${d.toLocaleString("en",{month:"long",year:"numeric"})}</h3><div class="cal">${h}</div></div><div class="note">One article per day. Scheduled drafts will appear on their dates.</div>`};
+V.approval=()=>`<div id="aplist"></div><div class="note">Approving marks the item ready. Real publishing and posting turn on in Steps 3 and 7.</div>`;
+V.settings=()=>`<div class="card"><h3>Blog details</h3><label for="sb">Blog name</label><input id="sb" value="Cozy Nest Nesting"><label for="sn">Niche</label><input id="sn" value="USA Home Decor">
+<label for="st">Daily draft time (Bangladesh)</label><input id="st" type="time" value="09:00"><div class="row"><button class="btn" onclick="saveSet()">Save settings</button></div></div>
+<div class="note">Never type passwords, OTPs or API keys into chat. Keys go into secure storage during setup.</div>`;
+
+let apr=JSON.parse(localStorage.getItem("buru_ap")||"[]");
+const sv=()=>{localStorage.setItem("buru_ap",JSON.stringify(apr));const e=document.getElementById("pendN");if(e)e.textContent=apr.filter(a=>a.s==="pending").length};
+function queue(t){apr.unshift({t:t+": sample item",s:"pending",d:new Date().toLocaleString()});sv();toast("Sent to Approval Center");}
+function drawAp(){const l=document.getElementById("aplist");if(!l)return;
+l.innerHTML=apr.length?apr.map((a,i)=>`<div class="card ap ${a.s!=="pending"?"done":""}" style="margin-bottom:10px"><div><h3>${a.t}</h3><p>${a.d} · ${a.s}</p></div>${a.s==="pending"?`<div class="row" style="margin:0"><button class="btn" onclick="dec(${i},'approved')">Approve</button><button class="btn no" onclick="dec(${i},'rejected')">Reject</button></div>`:""}</div>`).join(""):`<div class="card"><h3>Nothing to review</h3><p>Drafts and posts from BURU will appear here.</p></div>`}
+function dec(i,s){apr[i].s=s;sv();drawAp()}
+function saveSet(){localStorage.setItem("buru_set",JSON.stringify({b:sb.value,n:sn.value,t:st.value}));toast("Settings saved")}
+function toast(t){const e=document.createElement("div");e.textContent=t;e.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:84px;background:#154734;color:#fff;padding:10px 16px;border-radius:99px;z-index:50;font-size:14px";document.body.append(e);setTimeout(()=>e.remove(),2200)}
+
+const rep={article:"I will research a topic, write a 1,000–1,500 word draft with SEO details, and send it to Approval Center. Not active until Step 2.",keyword:"I will list USA home decor keywords with search intent. Not active until Step 5.",today:"I will run the daily workflow: topic, article, Blogger draft, Facebook and Pinterest copy. Not active until Step 4.",traffic:"I will summarize visitors and top posts. Needs Analytics in Step 8.",social:"I will draft Facebook and Pinterest posts for approval. Needs Step 6."};
+function reply(t){t=t.toLowerCase();return t.includes("keyword")?rep.keyword:t.includes("traffic")||t.includes("analy")?rep.traffic:t.includes("facebook")||t.includes("pinterest")?rep.social:t.includes("today")?rep.today:t.includes("article")||t.includes("write")?rep.article:"I can write articles, find keywords, analyze traffic and prepare social posts. Try one of the buttons below."}
+function initChat(){const m=document.getElementById("msgs"),i=document.getElementById("ci");
+const add=(c,t)=>{const d=document.createElement("div");d.className="m "+c;d.textContent=t;m.append(d);m.scrollTop=m.scrollHeight};
+const send=()=>{const t=i.value.trim();if(!t)return;add("u",t);i.value="";setTimeout(()=>add("b",reply(t)),300)};
+sendB.onclick=send;i.onkeydown=e=>{if(e.key==="Enter")send()};
+["Write a new home decor article","Find 10 trending keywords","Prepare today's content","Analyze my blog traffic","Prepare Facebook and Pinterest posts"].forEach(c=>{const b=document.createElement("button");b.textContent=c;b.onclick=()=>{i.value=c;send()};chips.append(b)});
+const R=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(!R)mic.style.display="none";else mic.onclick=()=>{const r=new R();r.lang="en-US";r.onresult=e=>{i.value=e.results[0][0].transcript;send()};r.onerror=()=>toast("Voice input failed. Check microphone permission.");r.start();toast("Listening…")}}
+
+function go(id){location.hash=id}
+function render(){const id=(location.hash||"#home").slice(1),s=S.find(x=>x[0]===id)||S[0];
+document.getElementById("title").textContent=s[1];document.title="BURU · "+s[1];
+document.getElementById("views").innerHTML=V[s[0]]();
+document.querySelectorAll("[data-id]").forEach(a=>a.classList.toggle("on",a.dataset.id===s[0]));
+document.getElementById("sheet").classList.remove("open");
+if(s[0]==="chat")initChat();if(s[0]==="approval")drawAp();
+if(s[0]==="settings"){const x=JSON.parse(localStorage.getItem("buru_set")||"null");if(x){sb.value=x.b;sn.value=x.n;st.value=x.t}}
+sv();window.scrollTo(0,0)}
+document.getElementById("side").innerHTML=`<div class="brand"><div class="logo">B</div><div><b>BURU</b><small>Cozy Nest Nesting</small></div></div>`+S.map(s=>`<a href="#${s[0]}" data-id="${s[0]}">${s[2]}&nbsp; ${s[1]}</a>`).join("");
+const main4=["home","chat","writer","approval"];
+document.getElementById("bnav").innerHTML=main4.map(id=>{const s=S.find(x=>x[0]===id);return `<a href="#${id}" data-id="${id}"><span class="ico">${s[2]}</span>${s[1].replace("Article Writer","Writer").replace("Approval Center","Approve")}</a>`}).join("")+`<button id="more"><span class="ico">☰</span>More</button>`;
+document.getElementById("sheetList").innerHTML=S.filter(s=>!main4.includes(s[0])).map(s=>`<a href="#${s[0]}">${s[2]}&nbsp; ${s[1]}</a>`).join("");
+more.onclick=()=>sheet.classList.add("open");sheet.onclick=e=>{if(e.target===sheet)sheet.classList.remove("open")};
+addEventListener("hashchange",render);render();
+</script>
+</body>
+</html>
